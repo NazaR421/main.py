@@ -1,127 +1,56 @@
-from random import choice, shuffle
-from time import sleep
-from PyQt5.QtWidgets import QApplication
-
-app=QApplication([])
-
-from main_window import *
-from menu_window import *
-
-class Question:
-    def __init__(self,question,answer,wrong_answer1,wrong_answer2,wrong_answer3):
-        self.question=question
-        self.answer=answer
-        self.wrong_answer1=wrong_answer1
-        self.wrong_answer2=wrong_answer2
-        self.wrong_answer3=wrong_answer3
-        self.isAsking=True
-        self.count_ask=0
-        self.count_right=0
-    def got_right(self):
-        self.count_ask+=1
-        self.count_right+=1
-    def got_wrong(self):
-        self.count_ask+=1
-q1=Question("Яблуко","apple","eppla","cucumber","apply")
-q2=Question("Машина","car","cer","bike","ship")
-q3=Question("Дім","Doma","home","city","meet")
-q4=Question("Риба","fish","grow","shape","shop")
-
-
-radio_buttons=[rb_ans1,rb_ans2,rb_ans3,rb_ans4]
-question=[q1,q2,q3,q4]
-
-def new_question():
-    global cur_q
-    cur_q=choice(question)
-    lb_question.setText(cur_q.question)
-    lb_right_answer.setText(cur_q.answer)
-    shuffle(radio_buttons)
-    radio_buttons[0].setText(cur_q.wrong_answer1)
-    radio_buttons[1].setText(cur_q.wrong_answer2)
-    radio_buttons[2].setText(cur_q.wrong_answer3)
-    radio_buttons[3].setText(cur_q.answer)
-
-new_question()
-
-def check():
-    for answer in radio_buttons:
-        if answer.isChecked():
-            if answer.text()==lb_right_answer.text():
-                cur_q.got_right()
-                lb_result.setText("Вірно!")
-                answer.setChecked(False)
-                break
-    else:
-        lb_result.setText("Не вірно!")
-        cur_q.got_wrong()
-
-def click_ok():
-    if btn_next.text()=='Відповісти':
-        check()
-        gb_question.hide()
-        gb_answer.show()
-        btn_next.setText("Наступне запитання")
-    else:
-        new_question()
-        gb_question.show()
-        gb_answer.hide()
-        btn_next.setText("Відповісти")
-
-        
-btn_next.clicked.connect(click_ok)
-
-def rest():
-    window.hide()
-    n=sp_rest.value()*60
-    sleep(n)
-    window.show()
-
-
-btn_rest.clicked.connect(rest)
-
-
-
-def menu_generation():
-    if cur_q.count_ask==0:
-        c=0
-    else:
-        c=(cur_q.count_right/cur_q.count_ask)*100
-
-    text=f'Разів відповіли:{cur_q.count_ask}\n' \
-         f'Вірних відповідей:{cur_q.count_right}\n' \
-         f'Успішність:{round(c,2)}%'
-    lb_statistic.setText(text)
-    menu_win.show()
-    window.hide()
-
-btn_menu.clicked.connect(menu_generation)
-
-def back_menu():
-    menu_win.hide()
-    window.show()
-
-btn_back.clicked.connect(back_menu)
-
-def clear():
-    le_question.clear()
-    le_right_ans.clear()
-    le_wrong_ans1.clear()
-    le_wrong_ans2.clear()
-    le_wrong_ans3.clear()
-
-btn_clear.clicked.connect(clear)
-
-def add_question():
-    new_q=Question(le_question.text(),le_right_ans.text(),
-                   le_wrong_ans1.text(),le_wrong_ans2.text(),
-                   le_wrong_ans3.text())
-    question.append(new_q)
-    clear()
-
-btn_addquestion.clicked.connect(add_question)
-
-
-window.show()
-app.exec()
+from PyQt5.QtWidgets import  QWidget, QLineEdit,\
+       QHBoxLayout, QVBoxLayout, QPushButton, QLabel 
+ 
+ 
+menu_win = QWidget() 
+ 
+lb_quest = QLabel('Введіть запитання:') 
+lb_right_ans = QLabel('Введіть вірну відповідь:') 
+lb_wrong_ans1 = QLabel('Введіть першу хибну відповідь') 
+lb_wrong_ans2 = QLabel('Введіть другу хибну відповідь') 
+lb_wrong_ans3 = QLabel('Введіть третю хибну відповідь') 
+ 
+le_question = QLineEdit() 
+le_right_ans = QLineEdit() 
+le_wrong_ans1 = QLineEdit() 
+le_wrong_ans2 = QLineEdit() 
+le_wrong_ans3 = QLineEdit() 
+ 
+lb_header_stat = QLabel('Статистика') 
+lb_statistic = QLabel() 
+ 
+vl_labels = QVBoxLayout() 
+vl_labels.addWidget(lb_quest) 
+vl_labels.addWidget(lb_right_ans) 
+vl_labels.addWidget(lb_wrong_ans1) 
+vl_labels.addWidget(lb_wrong_ans2) 
+vl_labels.addWidget(lb_wrong_ans3) 
+ 
+vl_lineEdits = QVBoxLayout() 
+vl_lineEdits.addWidget(le_question) 
+vl_lineEdits.addWidget(le_right_ans) 
+vl_lineEdits.addWidget(le_wrong_ans1) 
+vl_lineEdits.addWidget(le_wrong_ans2) 
+vl_lineEdits.addWidget(le_wrong_ans3) 
+ 
+hl_question = QHBoxLayout() 
+hl_question.addLayout(vl_labels) 
+hl_question.addLayout(vl_lineEdits) 
+ 
+btn_back = QPushButton('Назад') 
+btn_add_question = QPushButton('Додати запитання') 
+btn_clear = QPushButton('Очистити') 
+hl_buttons = QHBoxLayout() 
+hl_buttons.addWidget(btn_add_question) 
+hl_buttons.addWidget(btn_clear) 
+ 
+vl_res = QVBoxLayout() 
+vl_res.addLayout(hl_question) 
+vl_res.addLayout(hl_buttons) 
+vl_res.addWidget(lb_header_stat) 
+vl_res.addWidget(lb_statistic) 
+vl_res.addWidget(btn_back) 
+ 
+menu_win.setLayout(vl_res) 
+menu_win.resize(400, 300)
     
