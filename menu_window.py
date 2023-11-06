@@ -53,4 +53,3 @@ vl_res.addWidget(btn_back)
  
 menu_win.setLayout(vl_res) 
 menu_win.resize(400, 300)
-    
