@@ -93,13 +93,13 @@ def menu_generation():
          f'Успішність:{round(c,2)}%'
     lb_statistic.setText(text)
     menu_win.show()
-    window.hide()
+    win_card.hide()
 
 btn_menu.clicked.connect(menu_generation)
 
 def back_menu():
     menu_win.hide()
-    window.show()
+    win_card.show()
 
 btn_back.clicked.connect(back_menu)
 
@@ -119,8 +119,8 @@ def add_question():
     question.append(new_q)
     clear()
 
-btn_addquestion.clicked.connect(add_question)
+btn_add_question.clicked.connect(add_question)
 
 
-window.show()
+win_card.show()
 app.exec()
