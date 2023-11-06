@@ -1,4 +1,4 @@
- random import choice, shuffle
+from random import choice, shuffle
 from time import sleep
 from PyQt5.QtWidgets import QApplication
 
@@ -34,8 +34,8 @@ question=[q1,q2,q3,q4]
 def new_question():
     global cur_q
     cur_q=choice(question)
-    lb_question.setText(cur_q.question)
-    lb_right_answer.setText(cur_q.answer)
+    le_question.setText(cur_q.question)
+    le_right_ans.setText(cur_q.answer)
     shuffle(radio_buttons)
     radio_buttons[0].setText(cur_q.wrong_answer1)
     radio_buttons[1].setText(cur_q.wrong_answer2)
@@ -47,24 +47,24 @@ new_question()
 def check():
     for answer in radio_buttons:
         if answer.isChecked():
-            if answer.text()==lb_right_answer.text():
+            if answer.text()==le_right_ans.text():
                 cur_q.got_right()
-                lb_result.setText("Вірно!")
+                lb_Result.setText("Вірно!")
                 answer.setChecked(False)
                 break
     else:
-        lb_result.setText("Не вірно!")
+        lb_Result.setText("Не вірно!")
         cur_q.got_wrong()
 
 def click_ok():
     if btn_next.text()=='Відповісти':
         check()
-        gb_question.hide()
+        lb_quest.hide()
         gb_answer.show()
         btn_next.setText("Наступне запитання")
     else:
         new_question()
-        gb_question.show()
+        lb_quest.show()
         gb_answer.hide()
         btn_next.setText("Відповісти")
 
